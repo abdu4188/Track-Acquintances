@@ -86,7 +86,16 @@ class FormscreenState extends State<Formscreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
+        title: Center(
+          child: Text(
+            "Track Acquintances",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
       ),
       // resizeToAvoidBottomPadding: false,
       body: ListView(
