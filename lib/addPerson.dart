@@ -29,6 +29,7 @@ class FormscreenState extends State<Formscreen>{
                     "When did you meet this person?",
                     style: TextStyle(
                       fontSize: 16,
+                      fontFamily: 'Montserrat'
                     ),
                   ),
                 ],
@@ -41,83 +42,33 @@ class FormscreenState extends State<Formscreen>{
   }
 
   Widget _buildNameField(){
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Center(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Enter name of person you met",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Name of person',
-                      labelText: 'Name',
-                    ),
-                    validator: (String value){
-                      if(value.isEmpty){
-                        return "Name is required";
-                      }
-                    },
-                    onSaved: (String value){
-                      _name = value;
-                    },
-                  )
-                ],
-              )
-            )
-          ],
-        ),
+    return TextField(
+      decoration: InputDecoration(
+        icon: Icon(Icons.person),
+        labelText: 'Name',
+        labelStyle: TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          color: Colors.grey
+        )
       ),
     );
   }
 
-  Widget _buildPhoneNumberField(){
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Center(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Enter Phone number of person",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.phone),
-                      hintText: 'Name of person',
-                      labelText: 'Name',
-                    ),
-                    validator: (String value){
-                      if(value.isEmpty){
-                        return "Name is required";
-                      }
-                    },
-                    onSaved: (String value){
-                      _name = value;
-                    },
-                  )
-                ],
-              )
-            )
-          ],
-        ),
+  Widget _builPhoneField(){
+    return TextField(
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        icon: Icon(Icons.phone),
+        labelText: 'Phone Number',
+        labelStyle: TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.bold,
+          color: Colors.grey
+        )
       ),
-    );;
+    );
   }
-
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -134,29 +85,76 @@ class FormscreenState extends State<Formscreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(
-        child: Text('Track Acquaintances'),
-        ) 
+      appBar: AppBar(
+        
       ),
-      body: new Container(
-        child: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () => _selectDate(context),
-                child: Text('Select date'),
-              ),
-              _buildNameField(),
-              _buildPhoneNumberField(),
-              RaisedButton(
-                color: Colors.cyanAccent,
-                onPressed: () => {},
-                child: Text('Submit', style: TextStyle(color: Colors.blue, fontSize: 16),),
+      // resizeToAvoidBottomPadding: false,
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(15.0, 40.0, 0.0, 0.0),
+                  child: Text(
+                    'Add Person',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      color: Colors.teal,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat'
+                    ),
+                  ),
                 )
-            ],
+              ],
+            )
           ),
-        ),
+          Container(
+            padding: EdgeInsets.only(top: 35.0, left: 20.0),
+            child: Column(
+              children: <Widget>[
+                _buildDateFIeld(),
+                RaisedButton(
+                onPressed: () => _selectDate(context),
+                child: Text(
+                  'Select date',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat'
+                    ),
+                  )
+                ),
+                _buildNameField(),
+                SizedBox(height: 10.0,),
+                _builPhoneField(),
+                SizedBox(height: 25.0,),
+                Container(
+                  height: 40.0,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(20.0),
+                    shadowColor: Colors.greenAccent,
+                    color: Colors.teal,
+                    elevation: 7.0,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Center(
+                        child: Text(
+                          'Add',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       )
     );
   }
