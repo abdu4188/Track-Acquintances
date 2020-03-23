@@ -1,68 +1,66 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
-class Formscreen extends StatefulWidget{
+class Formscreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return FormscreenState();
   }
-  
 }
 
-class FormscreenState extends State<Formscreen>{
+class FormscreenState extends State<Formscreen> {
   DateTime _selectedDate = DateTime.now();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController phoneController = new TextEditingController();
 
-  Widget _buildDateFIeld(){
+  Widget _buildDateFIeld() {
     return Container(
       padding: const EdgeInsets.all(10),
       child: Center(
         child: Row(
           children: <Widget>[
             Expanded(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "When did you meet this person?",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Montserrat'
-                    ),
-                  ),
-                ],
-              )
-            )
+                child: Column(
+              children: <Widget>[
+                Text(
+                  "When did you meet this person?",
+                  style: TextStyle(fontSize: 16, fontFamily: 'Montserrat'),
+                ),
+              ],
+            ))
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNameField(){
+  Widget _buildNameField() {
     return TextField(
+      controller: nameController,
       decoration: InputDecoration(
-        icon: Icon(Icons.person),
-        labelText: 'Name',
-        labelStyle: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.grey
-        )
-      ),
+          icon: Icon(Icons.person),
+          labelText: 'Name',
+          labelStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Colors.grey)),
     );
   }
 
-  Widget _builPhoneField(){
+  Widget _builPhoneField() {
     return TextField(
+      controller: phoneController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        icon: Icon(Icons.phone),
-        labelText: 'Phone Number',
-        labelStyle: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.grey
-        )
-      ),
+          icon: Icon(Icons.phone),
+          labelText: 'Phone Number',
+          labelStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Colors.grey)),
     );
   }
 
@@ -81,48 +79,46 @@ class FormscreenState extends State<Formscreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "Track Acquintances",
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.bold
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              "Track Acquintances",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: <Color>[ 
-                  Colors.teal, Colors.tealAccent
-                  ])
-              ),
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Material(
-                      elevation: 10,
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      child: Image.asset('images/corona.JPG', width: 100, height: 100),
-                    )
-                  ],
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: <Color>[Colors.teal, Colors.tealAccent])),
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Material(
+                        elevation: 10,
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        child: Image.asset('images/corona.JPG',
+                            width: 100, height: 100),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            CustomListTile('Add Person', Icons.add, addTapped()),
-            CustomListTile('View added People', Icons.people, listTapped()),
-          ],
+              CustomListTile('Add Person', Icons.add, addTapped),
+              CustomListTile('View added People', Icons.people, listTapped),
+            ],
+          ),
         ),
-      ),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            child: Stack(
+        body: ListView(
+          children: <Widget>[
+            Container(
+                child: Stack(
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 40.0, 0.0, 0.0),
@@ -130,75 +126,88 @@ class FormscreenState extends State<Formscreen>{
                     'Add Person',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 40.0,
-                      color: Colors.teal,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat'
-                    ),
+                        fontSize: 40.0,
+                        color: Colors.teal,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat'),
                   ),
                 )
               ],
-            )
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 35.0, left: 20.0),
-            child: Column(
-              children: <Widget>[
-                _buildDateFIeld(),
-                RaisedButton(
-                onPressed: () => _selectDate(context),
-                child: Text(
-                  'Select date',
-                  style: TextStyle(
-                      fontFamily: 'Montserrat'
-                    ),
-                  )
-                ),
-                _buildNameField(),
-                SizedBox(height: 10.0,),
-                _builPhoneField(),
-                SizedBox(height: 25.0,),
-                Container(
-                  height: 40.0,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20.0),
-                    shadowColor: Colors.greenAccent,
-                    color: Colors.teal,
-                    elevation: 7.0,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Center(
-                        child: Text(
-                          'Add',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold
+            )),
+            Container(
+              padding: EdgeInsets.only(top: 35.0, left: 20.0),
+              child: Column(
+                children: <Widget>[
+                  _buildDateFIeld(),
+                  RaisedButton(
+                      onPressed: () => _selectDate(context),
+                      child: Text(
+                        'Select date',
+                        style: TextStyle(fontFamily: 'Montserrat'),
+                      )),
+                  _buildNameField(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _builPhoneField(),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  Container(
+                    height: 40.0,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(20.0),
+                      shadowColor: Colors.greenAccent,
+                      color: Colors.teal,
+                      elevation: 7.0,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () => addPerson(),
+                        child: Center(
+                          child: Text(
+                            'Add',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      )
-    );
+                  )
+                ],
+              ),
+            )
+          ],
+        ));
   }
-  
+  addPerson() async {
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String stringDate = formatter.format(_selectedDate);
+
+    final refs = await SharedPreferences.getInstance();
+    refs.setString("Person"+stringDate, json.encode(toJson(nameController.text, phoneController.text, stringDate)));
+  }
+  Map<String,dynamic> toJson(String name, String phone, String date) => {
+    'name': name,
+    'phone': phone,
+    'date': date
+  };
+
 }
 
-addTapped(){
 
+addTapped(BuildContext context) async{
+  Navigator.of(context).pop();
 }
 
-listTapped(){
-
+listTapped(BuildContext context) async {
+  await Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => ListPerson()));
+  Navigator.of(context).pop();
 }
 
-class CustomListTile extends StatelessWidget{
+class CustomListTile extends StatelessWidget {
   final String _name;
   final IconData _icon;
   final Function onTap;
@@ -208,39 +217,62 @@ class CustomListTile extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey))
-        ),
-        child: InkWell(
-          splashColor: Colors.teal,
-          onTap: () => onTap,
-          child: Container(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
+        padding: EdgeInsets.fromLTRB(9, 0, 9, 0),
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.grey))),
+          child: InkWell(
+              splashColor: Colors.teal,
+              onTap: () => onTap(context),
+              child: Container(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Icon(_icon),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                      _name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Montserrat'
-                      ),
-                    ),
-                  )
+                    Row(
+                      children: <Widget>[
+                        Icon(_icon),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            _name,
+                            style: TextStyle(
+                                fontSize: 16, fontFamily: 'Montserrat'),
+                          ),
+                        )
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          )
-        ),
-      )
+                ),
+              )),
+        ));
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Formscreen(),
     );
+  }
+}
+
+class ListPerson extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("List Person"),
+        ),
+        body: Text("ListPerson"));
   }
 }
