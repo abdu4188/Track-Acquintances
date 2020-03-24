@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:sqflite/sqflite.dart';
+import 'listPerson.dart';
+import 'package:path/path.dart';
 
 class Formscreen extends StatefulWidget {
   @override
@@ -15,6 +16,11 @@ class FormscreenState extends State<Formscreen> {
   DateTime _selectedDate = DateTime.now();
   TextEditingController nameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
+
+  @override
+  initState(){
+    super.initState();
+  }
 
   Widget _buildDateFIeld() {
     return Container(
@@ -181,18 +187,40 @@ class FormscreenState extends State<Formscreen> {
           ],
         ));
   }
-  addPerson() async {
+  String stringDate;
+  addPerson() {
     var formatter = new DateFormat('yyyy-MM-dd');
-    String stringDate = formatter.format(_selectedDate);
+    stringDate = formatter.format(_selectedDate);
 
-    final refs = await SharedPreferences.getInstance();
-    refs.setString("Person"+stringDate, json.encode(toJson(nameController.text, phoneController.text, stringDate)));
+    saveToDb();
+    
   }
-  Map<String,dynamic> toJson(String name, String phone, String date) => {
-    'name': name,
-    'phone': phone,
-    'date': date
-  };
+  saveToDb() async{
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "people.db");
+
+    Database db;
+
+    db = await openDatabase(path, version: 1, onOpen: (db) {
+    }, onCreate: (Database db, int version) async {
+      await db.execute('''CREATE TABLE IF NOT EXISTS people
+      (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        phone TEXT,
+        date TEXT
+      )
+      '''
+      );
+    });
+
+    print( await db.insert("people", {
+      "name": nameController.text,
+      "phone": phoneController.text,
+      "date": stringDate
+      }));
+
+  }
 
 }
 
@@ -263,16 +291,5 @@ class MyApp extends StatelessWidget {
       ),
       home: Formscreen(),
     );
-  }
-}
-
-class ListPerson extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("List Person"),
-        ),
-        body: Text("ListPerson"));
   }
 }
