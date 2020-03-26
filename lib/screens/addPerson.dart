@@ -168,7 +168,7 @@ class FormscreenState extends State<Formscreen> {
                       elevation: 7.0,
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () => addPerson(),
+                        onTap: () => addPerson(context),
                         child: Center(
                           child: Text(
                             'Add',
@@ -188,14 +188,14 @@ class FormscreenState extends State<Formscreen> {
         ));
   }
   String stringDate;
-  addPerson() {
+  addPerson(BuildContext context) {
     var formatter = new DateFormat('yyyy-MM-dd');
     stringDate = formatter.format(_selectedDate);
 
-    saveToDb();
+    saveToDb(context);
     
   }
-  saveToDb() async{
+  saveToDb(BuildContext context) async{
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, "people.db");
 
@@ -214,12 +214,41 @@ class FormscreenState extends State<Formscreen> {
       );
     });
 
-    print( await db.insert("people", {
+    int insertResponse = await db.insert("people", {
       "name": nameController.text,
       "phone": phoneController.text,
       "date": stringDate
-      }));
+      });
 
+    if(insertResponse == -1){
+      final snackBar = SnackBar(
+          content: Text('Something went Wrong!'),
+          action: SnackBarAction(
+            label: 'Close',
+            onPressed: () {
+              // Some code to undo the change.
+            },
+          ),
+        );
+        BuildContext context;
+        Scaffold.of(context).showSnackBar(snackBar);
+    }
+    else{
+      FocusScope.of(context).unfocus();
+      _selectedDate = DateTime.now();
+      nameController.text = "";
+      phoneController.text = "";
+      final snackBar = SnackBar(
+          content: Text('Person added successfully!'),
+          action: SnackBarAction(
+            label: 'Close',
+            onPressed: () {
+              Scaffold.of(context).hideCurrentSnackBar();
+            },
+          ),
+        );
+        Scaffold.of(context).showSnackBar(snackBar);
+    }
   }
 
 }
@@ -285,9 +314,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Track Acquintances',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
       home: Formscreen(),
     );

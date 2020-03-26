@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'addPerson.dart';
+import 'screens/addPerson.dart';
 
 void main() => runApp(Home());
 
@@ -13,8 +13,11 @@ class Home extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.teal
       ),
-      home: Formscreen(),
+      home: Scaffold(
+        body: Formscreen(),
+      ),
     );
   }
+  
   
 }
