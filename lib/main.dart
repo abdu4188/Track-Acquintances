@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/addPerson.dart';
+import 'screens/splashScreen.dart';
 
 void main() => runApp(Home());
 
@@ -14,8 +15,11 @@ class Home extends StatelessWidget{
         primarySwatch: Colors.teal
       ),
       home: Scaffold(
-        body: Formscreen(),
+        body: SplashScreen(),
       ),
+      routes: <String, WidgetBuilder>{
+      '/HomeScreen': (BuildContext context) => new Formscreen()
+      },
     );
   }
   
