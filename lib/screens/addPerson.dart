@@ -121,71 +121,75 @@ class FormscreenState extends State<Formscreen> {
             ],
           ),
         ),
-        body: ListView(
-          children: <Widget>[
-            Container(
-                child: Stack(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(15.0, 40.0, 0.0, 0.0),
-                  child: Text(
-                    'Add Person',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 40.0,
-                        color: Colors.teal,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat'),
-                  ),
-                )
-              ],
-            )),
-            Container(
-              padding: EdgeInsets.only(top: 35.0, left: 20.0),
-              child: Column(
+        body: Builder(
+          builder: (context) => 
+            ListView(
+            children: <Widget>[
+              Container(
+                  child: Stack(
                 children: <Widget>[
-                  _buildDateFIeld(),
-                  RaisedButton(
-                      onPressed: () => _selectDate(context),
-                      child: Text(
-                        'Select date',
-                        style: TextStyle(fontFamily: 'Montserrat'),
-                      )),
-                  _buildNameField(),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _builPhoneField(),
-                  SizedBox(
-                    height: 25.0,
-                  ),
                   Container(
-                    height: 40.0,
-                    child: Material(
-                      borderRadius: BorderRadius.circular(20.0),
-                      shadowColor: Colors.greenAccent,
-                      color: Colors.teal,
-                      elevation: 7.0,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () => addPerson(context),
-                        child: Center(
-                          child: Text(
-                            'Add',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                    padding: EdgeInsets.fromLTRB(15.0, 40.0, 0.0, 0.0),
+                    child: Text(
+                      'Add Person',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 40.0,
+                          color: Colors.teal,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat'),
                     ),
                   )
                 ],
-              ),
-            )
-          ],
-        ));
+              )),
+              Container(
+                padding: EdgeInsets.only(top: 35.0, left: 20.0),
+                child: Column(
+                  children: <Widget>[
+                    _buildDateFIeld(),
+                    RaisedButton(
+                        onPressed: () => _selectDate(context),
+                        child: Text(
+                          'Select date',
+                          style: TextStyle(fontFamily: 'Montserrat'),
+                        )),
+                    _buildNameField(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _builPhoneField(),
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                    Container(
+                      height: 40.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.greenAccent,
+                        color: Colors.teal,
+                        elevation: 7.0,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () => addPerson(context),
+                          child: Center(
+                            child: Text(
+                              'Add',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )
+          )
+        );
   }
   String stringDate;
   addPerson(BuildContext context) {
