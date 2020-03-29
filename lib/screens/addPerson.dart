@@ -12,6 +12,9 @@ class Formscreen extends StatefulWidget {
   }
 }
 
+bool _nameValidate = false;
+bool _phoneValidate = false;
+
 class FormscreenState extends State<Formscreen> {
   DateTime _selectedDate = DateTime.now();
   TextEditingController nameController = new TextEditingController();
@@ -47,6 +50,7 @@ class FormscreenState extends State<Formscreen> {
     return TextField(
       controller: nameController,
       decoration: InputDecoration(
+        errorText: _nameValidate ? "Value can't be empty" : null,
           icon: Icon(Icons.person),
           labelText: 'Name',
           labelStyle: TextStyle(
@@ -61,12 +65,13 @@ class FormscreenState extends State<Formscreen> {
       controller: phoneController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          icon: Icon(Icons.phone),
-          labelText: 'Phone Number',
-          labelStyle: TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.bold,
-              color: Colors.grey)),
+        errorText: _phoneValidate ? "Value can't be empty" : null,
+        icon: Icon(Icons.phone),
+        labelText: 'Phone Number',
+        labelStyle: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+            color: Colors.grey)),
     );
   }
 
@@ -196,8 +201,13 @@ class FormscreenState extends State<Formscreen> {
     var formatter = new DateFormat('yyyy-MM-dd');
     stringDate = formatter.format(_selectedDate);
 
-    saveToDb(context);
-    
+    setState(() {
+      nameController.text.isEmpty ? _nameValidate = true : _nameValidate = false;
+      phoneController.text.isEmpty ? _phoneValidate = true : _phoneValidate = false;
+    });
+    if(_nameValidate == false && _phoneValidate == false){
+      saveToDb(context);
+    }    
   }
   saveToDb(BuildContext context) async{
     var databasesPath = await getDatabasesPath();

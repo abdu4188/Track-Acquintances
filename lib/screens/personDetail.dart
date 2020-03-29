@@ -61,65 +61,59 @@ class PersonDetailState extends State<PersonDetail>{
         child: CircularProgressIndicator( backgroundColor: Colors.teal, ),
       ) :
       Container(
-        child: Stack(
+        padding: EdgeInsets.fromLTRB(35.0, 40.0, 0.0, 0.0),
+        child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(35.0, 40.0, 0.0, 0.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    date,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      color: Colors.teal,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat'),
-                  ),
-                  SingleChildScrollView(
-                    child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: people.length,
-                    itemBuilder: (BuildContext context, int index){
-                      return Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-                          child: Center(
-                            child: ListTile(
-                              onTap: () => {},
-                              title: Text(
-                                "Name: "+people[index]['name'],
-                                style: TextStyle(
-                                  color: Colors.teal,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 21
-                                  ),
-                                ),
-                              subtitle: Text(
-                                "Phone number: "+people[index]['phone'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 16
-                                ),
-                              ),
-                            )
-                          ) 
+            Text(
+              date,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30.0,
+                color: Colors.teal,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'),
+            ),
+            Expanded(
+              child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: people.length,
+              itemBuilder: (BuildContext context, int index){
+                return Card(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
+                    child: Center(
+                      child: ListTile(
+                        onTap: () => {},
+                        title: Text(
+                          "Name: "+people[index]['name'],
+                          style: TextStyle(
+                            color: Colors.teal,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                            fontSize: 21
+                            ),
+                          ),
+                        subtitle: Text(
+                          "Phone number: "+people[index]['phone'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                            fontSize: 16
+                          ),
                         ),
-                      );
-                      },
+                      )
+                    ) 
                   ),
-                  )  
-                ],
-              )
-            ),                   
+                );
+                },
+            ),
+            )  
           ],
-          ),
-        ),
-      );
+        )
+      ),
+    );
   }
   
 }

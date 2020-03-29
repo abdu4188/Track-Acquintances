@@ -78,8 +78,6 @@ class ListPersonState extends State<ListPerson>{
     );
   }
 
-  dropClicked() {}
-
   dateTapped(String date, BuildContext context) async{
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PersonDetail(date))
