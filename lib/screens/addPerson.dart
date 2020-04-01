@@ -1,9 +1,13 @@
+import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
+import 'contactsPage.dart';
 import 'listPerson.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Formscreen extends StatefulWidget {
   @override
@@ -14,11 +18,12 @@ class Formscreen extends StatefulWidget {
 
 bool _nameValidate = false;
 bool _phoneValidate = false;
+TextEditingController nameController = new TextEditingController();
+TextEditingController phoneController = new TextEditingController();
 
 class FormscreenState extends State<Formscreen> {
+
   DateTime _selectedDate = DateTime.now();
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController phoneController = new TextEditingController();
 
   @override
   initState(){
@@ -153,11 +158,48 @@ class FormscreenState extends State<Formscreen> {
                   children: <Widget>[
                     _buildDateFIeld(),
                     RaisedButton(
-                        onPressed: () => _selectDate(context),
-                        child: Text(
-                          'Select date',
-                          style: TextStyle(fontFamily: 'Montserrat'),
-                        )),
+                      onPressed: () => _selectDate(context),
+                      child: Text(
+                        'Select date',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          color: Colors.teal
+                          ),
+                    )),
+                    
+                    RaisedButton(
+                      onPressed: () async {
+                        final PermissionStatus permissionStatus = await _getPermission();
+                        if (permissionStatus == PermissionStatus.granted) {
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => ContactsPage()));
+                        } else {
+                          //If permissions have been denied show standard cupertino alert dialog
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    title: Text('Permissions error'),
+                                    content: Text('Please enable contacts access '
+                                        'permission in system settings'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Close'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ));
+                        }
+                      },
+                      child: Text(
+                        'Select from contacts',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          color: Colors.teal
+                          ),
+                      )
+                    ),
                     _buildNameField(),
                     SizedBox(
                       height: 10.0,
@@ -265,6 +307,10 @@ class FormscreenState extends State<Formscreen> {
     }
   }
 
+
+  setValuesInForm(Contact contact){
+    
+  }
 }
 
 
@@ -277,6 +323,32 @@ listTapped(BuildContext context) async {
       .push(MaterialPageRoute(builder: (context) => ListPerson()));
   Navigator.of(context).pop();
 }
+
+Contact contact;
+
+
+
+setValuesInForm(Contact contact){
+  nameController.text = contact.displayName;
+  phoneController.text = contact.phones.elementAt(0).value;
+}
+
+
+  Future<PermissionStatus>  _getPermission() async{
+    final PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.contacts);
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.denied ){
+      final Map<PermissionGroup, PermissionStatus> permissionStatus =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.contacts]);
+      return permissionStatus[PermissionGroup.contacts] ??
+          PermissionStatus.unknown;
+    } else {
+      return permission;
+    }
+  }
+
 
 class CustomListTile extends StatelessWidget {
   final String _name;
