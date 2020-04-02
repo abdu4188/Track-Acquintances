@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
+import 'package:track_aquintances/screens/editPerson.dart';
 import 'package:track_aquintances/screens/homeScreen.dart';
 import 'package:track_aquintances/screens/listPerson.dart';
 import 'package:track_aquintances/screens/personDetail.dart';
@@ -23,6 +24,7 @@ class Home extends StatelessWidget{
       routes: <String, WidgetBuilder>{
       '/HomeScreen': (BuildContext context) => new HomeScreen(),
       '/AddPerson' : (BuildContext context) => new Formscreen(),
+      '/EditPerson' : (BuildContext context) => new EditScreen(),
       '/ListDates' : (BuildContext context) => new ListPerson(),
       },
     );

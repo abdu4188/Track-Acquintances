@@ -6,15 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:track_aquintances/screens/status.dart';
 import 'package:track_aquintances/screens/symptoms.dart';
+import 'addPerson.dart';
 import 'contactsPage.dart';
 import 'listPerson.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class Formscreen extends StatefulWidget {
+class EditScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return FormscreenState();
+    return EditScreenState();
   }
 }
 
@@ -22,8 +23,9 @@ bool _nameValidate = false;
 bool _phoneValidate = false;
 TextEditingController nameController = new TextEditingController();
 TextEditingController phoneController = new TextEditingController();
+int personId;
 
-class FormscreenState extends State<Formscreen> {
+class EditScreenState extends State<EditScreen> {
 
   DateTime _selectedDate = DateTime.now();
 
@@ -101,7 +103,7 @@ class FormscreenState extends State<Formscreen> {
         appBar: AppBar(
           title: Center(
             child: Text(
-              "Track Acquintances",
+              "Edit Person",
               style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Montserrat',
@@ -149,7 +151,7 @@ class FormscreenState extends State<Formscreen> {
                   Container(
                     padding: EdgeInsets.fromLTRB(15.0, 40.0, 0.0, 0.0),
                     child: Text(
-                      'Add Person',
+                      'Edit Person',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 40.0,
@@ -228,7 +230,7 @@ class FormscreenState extends State<Formscreen> {
                           onTap: () => addPerson(context),
                           child: Center(
                             child: Text(
-                              'Add',
+                              'Edit',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Montserrat',
@@ -281,11 +283,11 @@ class FormscreenState extends State<Formscreen> {
       );
     });
 
-    int insertResponse = await db.insert("people", {
+    int insertResponse = await db.update("people", {
       "name": nameController.text,
       "phone": phoneController.text,
       "date": stringDate
-      });
+      }, where: "id == $personId");
 
     if(insertResponse == -1){
       final snackBar = SnackBar(
@@ -306,7 +308,7 @@ class FormscreenState extends State<Formscreen> {
       nameController.text = "";
       phoneController.text = "";
       final snackBar = SnackBar(
-          content: Text('Person added successfully!'),
+          content: Text('Entry edited successfully!'),
           action: SnackBarAction(
             label: 'Close',
             onPressed: () {
@@ -357,6 +359,12 @@ Contact contact;
 setValuesInForm(Contact contact){
   nameController.text = contact.displayName;
   phoneController.text = contact.phones.elementAt(0).value;
+}
+
+editContact(String name, int id, String phone){
+  personId = id;
+  nameController.text = name;
+  phoneController.text = phone;
 }
 
 

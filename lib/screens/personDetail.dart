@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'addPerson.dart';
+import 'editPerson.dart';
 
 String date;
 List<Map<String, dynamic>> temp = [];
@@ -117,7 +118,7 @@ class PersonDetailState extends State<PersonDetail>{
                                 size: 28,
                               ),
                               onTap: () => {
-                                editTapped(people[index]['name'], people[index]['phone'], context),
+                                editTapped(people[index]['name'], people[index]['id'], people[index]['phone'], context),
                               }
                             ),
                             GestureDetector(
@@ -212,11 +213,9 @@ class PersonDetailState extends State<PersonDetail>{
     }
   }
 
-  editTapped(String name, String phone, BuildContext context){
-      print("tapped");
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/AddPerson');
-      editContact(name, phone);
+  editTapped(String name, int id, String phone, BuildContext context){
+      Navigator.of(context).pushNamed('/EditPerson');
+      editContact(name, id, phone);
     }
   
 }
