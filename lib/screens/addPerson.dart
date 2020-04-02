@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:track_aquintances/screens/status.dart';
+import 'package:track_aquintances/screens/symptoms.dart';
 import 'contactsPage.dart';
 import 'listPerson.dart';
 import 'package:path/path.dart';
@@ -129,6 +131,8 @@ class FormscreenState extends State<Formscreen> {
               ),
               CustomListTile('Add Person', Icons.add, addTapped),
               CustomListTile('View added People', Icons.people, listTapped),
+              CustomListTile('View Stats', Icons.show_chart, statusTapped),
+              CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
             ],
           ),
         ),
@@ -331,6 +335,18 @@ addTapped(BuildContext context) async{
 listTapped(BuildContext context) async {
   await Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => ListPerson()));
+  Navigator.of(context).pop();
+}
+
+statusTapped(BuildContext context) async {
+  await Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => StatusPage()));
+  Navigator.of(context).pop();
+}
+
+symptomsTapped(BuildContext context) async {
+  await Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => Symptoms()));
   Navigator.of(context).pop();
 }
 
