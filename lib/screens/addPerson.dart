@@ -131,7 +131,10 @@ class FormscreenState extends State<Formscreen> {
             ],
           ),
         ),
-        body: Builder(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: Builder(
           builder: (context) => 
             ListView(
             children: <Widget>[
@@ -235,7 +238,10 @@ class FormscreenState extends State<Formscreen> {
               )
             ],
           )
-          )
+          ),
+            )
+          ],
+        )
         );
   }
   String stringDate;
@@ -315,6 +321,8 @@ class FormscreenState extends State<Formscreen> {
 
 
 addTapped(BuildContext context) async{
+   await Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => Formscreen()));
   Navigator.of(context).pop();
 }
 

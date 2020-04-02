@@ -10,6 +10,8 @@ class ContactsPage extends StatefulWidget {
 class _ContactsPageState extends State<ContactsPage> {
   Iterable<Contact> _contacts;
   int currentIndex;
+  String search = "";
+  TextEditingController searchController = new TextEditingController();
 
   @override
   void initState() {
@@ -17,12 +19,20 @@ class _ContactsPageState extends State<ContactsPage> {
     super.initState();
   }
 
+  searchChanged(){
+    setState(() {
+      search = searchController.text;
+    });
+  }
+
   Future<void> getContacts() async {
     //We already have permissions for contact when we get to this page, so we
     // are now just retrieving it
     final Iterable<Contact> contacts = await ContactsService.getContacts();
     setState(() {
-      _contacts = contacts;
+      _contacts = contacts.where(
+        (contact) => contact.displayName.contains(search)
+      );
     });
   }
 
@@ -32,10 +42,41 @@ class _ContactsPageState extends State<ContactsPage> {
       appBar: AppBar(
         title: (Text('Contacts')),
       ),
-      body: _contacts != null
+      body: Container(
+        child: ListView(
+        children: <Widget>[
+          Container(
+            width: 90,
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.search),
+                      labelText: "search"
+                    ),
+                    controller: searchController,
+                  ),
+                  FlatButton(
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.teal,
+                      size: 45,
+                      ),
+                    onPressed: () => searchChanged(),
+                  )
+                ],
+              )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          _contacts != null
           //Build a list view of all contacts, displaying their avatar and
           // display name
           ? ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               itemCount: _contacts?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 Contact contact = _contacts?.elementAt(index);
@@ -91,6 +132,10 @@ class _ContactsPageState extends State<ContactsPage> {
                 },
             )
           : Center(child: const CircularProgressIndicator()),
-    );
+        ],
+      )
+    
+      )
+      );
   }
 }
