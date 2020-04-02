@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'addPerson.dart';
+
 class StatusPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -30,6 +32,33 @@ class StatusPageState extends State<StatusPage>{
           ),
         ),
       ),
+      drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: <Color>[Colors.teal, Colors.tealAccent])),
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Material(
+                        elevation: 10,
+                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        child: Image.asset('images/covid.png',
+                            width: 100, height: 100),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              CustomListTile('Add Person', Icons.add, addTapped),
+              CustomListTile('View added People', Icons.people, listTapped),
+              CustomListTile('View Stats', Icons.show_chart, statusTapped),
+              CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
+            ],
+          ),
+        ),
       body: Container(
         child: FlatButton(onPressed: () => show(), child: Text("Fetch")),
       ),

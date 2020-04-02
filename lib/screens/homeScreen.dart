@@ -45,6 +45,8 @@ class HomeScreenState extends State<HomeScreen>{
               ),
               CustomListTile('Add Person', Icons.add, addTapped),
               CustomListTile('View added People', Icons.people, listTapped),
+              CustomListTile('View Stats', Icons.show_chart, statusTapped),
+              CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
             ],
           ),
         ),
