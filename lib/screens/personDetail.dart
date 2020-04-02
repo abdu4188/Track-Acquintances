@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'addPerson.dart';
 
 String date;
 List<Map<String, dynamic>> temp = [];
@@ -43,9 +44,12 @@ class PersonDetailState extends State<PersonDetail>{
     fetchPeople(date);
   }
 
+  final globalKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKey,
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -78,7 +82,7 @@ class PersonDetailState extends State<PersonDetail>{
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: people.length,
-              itemBuilder: (BuildContext context, int index){
+              itemBuilder: (BuildContext buildContext, int index){
                 return Card(
                   color: Colors.white,
                   child: Padding(
@@ -103,6 +107,55 @@ class PersonDetailState extends State<PersonDetail>{
                             fontSize: 16
                           ),
                         ),
+                        trailing: Container(
+                          child: Column(
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.teal,
+                                size: 28,
+                              ),
+                              onTap: () => {
+                                editTapped(people[index]['name'], people[index]['phone'], context),
+                              }
+                            ),
+                            GestureDetector(
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 28,
+                              ),
+                              onTap: () => {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context){
+                                    return AlertDialog(
+                                      title: Text("Alert"),
+                                      content: Text("Are you sure you want to delete this entry"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          onPressed: () => {
+                                            Navigator.of(context).pop(),
+                                            deleteEntry(people[index]['id'], context)
+                                            }, 
+                                          child: Text("Yes")
+                                        ),
+                                        FlatButton(
+                                          onPressed: () => {
+                                            Navigator.of(context).pop()
+                                          }, 
+                                          child: Text("Close")
+                                        )
+                                      ],
+                                    );
+                                  }
+                                )
+                              },
+                            )
+                          ],
+                        ),
+                        )
                       )
                     ) 
                   ),
@@ -114,6 +167,56 @@ class PersonDetailState extends State<PersonDetail>{
         )
       ),
     );
+
+    
   }
+
+  deleteEntry(int id, BuildContext context) async{
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "people.db");
+
+    Database db;
+    db = await openDatabase(path, version: 1);
+    
+    var result = await db.delete('people', where: "id = ?", whereArgs: [id]);
+
+    if(result == 0){
+      final snackBar = SnackBar(
+          content: Text('Something went Wrong!'),
+          action: SnackBarAction(
+            label: 'Close',
+            onPressed: () {
+              // Some code to undo the change.
+            },
+          ),
+        );
+        globalKey.currentState.showSnackBar(snackBar);
+        setState(() {
+          
+        });
+    }
+    else{
+      final snackBar = SnackBar(
+          content: Text('Entry deleted successfuly'),
+          action: SnackBarAction(
+            label: 'Close',
+            onPressed: () {
+              // Some code to undo the change.
+            },
+          ),
+        );
+        globalKey.currentState.showSnackBar(snackBar);
+        setState(() {
+          
+        });
+    }
+  }
+
+  editTapped(String name, String phone, BuildContext context){
+      print("tapped");
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed('/AddPerson');
+      editContact(name, phone);
+    }
   
 }

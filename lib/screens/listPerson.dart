@@ -83,6 +83,7 @@ class ListPersonState extends State<ListPerson>{
       MaterialPageRoute(builder: (context) => PersonDetail(date))
     );
     Navigator.of(context).pop();
+
   }
   
 }

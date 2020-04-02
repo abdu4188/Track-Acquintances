@@ -65,6 +65,7 @@ class FormscreenState extends State<Formscreen> {
     );
   }
 
+
   Widget _builPhoneField() {
     return TextField(
       controller: phoneController,
@@ -320,6 +321,7 @@ class FormscreenState extends State<Formscreen> {
 }
 
 
+  
 addTapped(BuildContext context) async{
    await Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => Formscreen()));
@@ -339,6 +341,12 @@ Contact contact;
 setValuesInForm(Contact contact){
   nameController.text = contact.displayName;
   phoneController.text = contact.phones.elementAt(0).value;
+}
+
+editContact(String name, String phone){
+  print(name+phone);
+  nameController.text = name;
+  phoneController.text = phone;
 }
 
 

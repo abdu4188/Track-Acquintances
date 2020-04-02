@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:track_aquintances/screens/addPerson.dart';
 import 'package:track_aquintances/screens/homeScreen.dart';
+import 'package:track_aquintances/screens/listPerson.dart';
+import 'package:track_aquintances/screens/personDetail.dart';
 import 'screens/splashScreen.dart';
 
 void main() => runApp(Home());
@@ -18,7 +21,9 @@ class Home extends StatelessWidget{
         body: SplashScreen(),
       ),
       routes: <String, WidgetBuilder>{
-      '/HomeScreen': (BuildContext context) => new HomeScreen()
+      '/HomeScreen': (BuildContext context) => new HomeScreen(),
+      '/AddPerson' : (BuildContext context) => new Formscreen(),
+      '/ListDates' : (BuildContext context) => new ListPerson(),
       },
     );
   }
