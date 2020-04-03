@@ -12,11 +12,18 @@ class StatusPage extends StatefulWidget{
   }
 }
 
+bool hasLoaded = false;
+String selectedValue = "";
+int confirmed = 0;
+int death = 0;
+int recovered =0;
 class StatusPageState extends State<StatusPage>{
   @override
   void initState() {
     super.initState();
-    fetch();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetch();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -59,9 +66,142 @@ class StatusPageState extends State<StatusPage>{
             ],
           ),
         ),
-      body: Container(
-        child: FlatButton(onPressed: () => show(), child: Text("Fetch")),
-      ),
+      body: hasLoaded ? Center(
+        child: Column(
+          children: <Widget>[
+            Center(
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(30),
+                    child: Center(
+                      child: Text(
+                        "Pick a country to view data",
+                        style: TextStyle(
+                          color: Colors.teal,
+                          fontFamily: "Montserrat",
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 80,
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButton<String>(
+                          hint: Text(selectedValue),
+                          isExpanded: true,
+                          style: TextStyle(
+                            color: Colors.teal,
+                            fontSize: 16,
+                            fontFamily: 'Montserrat'
+                          ),
+                          iconSize: 50,
+                          iconEnabledColor: Colors.teal,
+                          elevation: 10,
+                          items: stringCountries.map((String value){
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(), 
+                          onChanged: (String value) => {
+                            selectedValue = value,
+                            calculateValues(value),
+                          }
+                        ),
+                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Confirmed: ",
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Montserrat",
+                                fontSize: 20
+                              ),
+                            ),
+                            Text(
+                              "$confirmed",
+                              style: TextStyle(
+                                fontFamily: "Montserrat",
+                                fontSize: 18
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Deaths: ",
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Montserrat",
+                                fontSize: 20
+                              ),
+                            ),
+                            Text(
+                              "$death",
+                              style: TextStyle(
+                                fontFamily: "Montserrat",
+                                fontSize: 18
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Recovered: ",
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Montserrat",
+                                fontSize: 20
+                              ),
+                            ),
+                            Text(
+                              "$recovered",
+                              style: TextStyle(
+                                fontFamily: "Montserrat",
+                                fontSize: 18
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    )
+                  )
+                ],
+              ),
+            ),
+            Text(
+              "Source: John Hopkins University",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.teal,
+                fontFamily: 'Montserrat'
+              ),
+              )
+          ]
+        )
+        ) :
+      Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.teal,
+          
+        ),
+      )
   );
   } 
 
@@ -69,15 +209,45 @@ fetch(){
   print("fetch");
   API.getStats().then(
     (response) => {
+      // print(countries),
       response = json.decode(response.body),
-      countries = response['data']['covid19Stats'].map((model) => CovidData.fromJson(model)).toList(), 
-      // print(json.decode(response.body)['data']['covid19Stats'][0])
+      covidData = response['data']['covid19Stats'].map((model) => CovidData.fromJson(model)).toList(), 
+      show()
     }
   );
+  setState(() {
+  });
+}
+
+show(){
+  for (var i = 0; i < covidData.length; i++) {
+    countries.add(covidData[i].country);
+  }
+  countries = countries.toSet().toList();
+  for (var i = 0; i < countries.length; i++) {
+    stringCountries.add(countries[i].toString());
+  }
+  print(covidData[0].confirmed);
+  hasLoaded = true;
   setState(() {
     
   });
 }
+  calculateValues(String selected){
+    confirmed = 0;
+    death = 0;
+    recovered = 0;
+    for (var i = 0; i < covidData.length; i++) {
+      if(covidData[i].country.toString() == selected ){
+        confirmed += covidData[i].confirmed;
+        death += covidData[i].deaths;
+        recovered += covidData[i].recovered;
+      }
+    }
+    setState(() {
+      
+    });
+  }
 }
 
 class CovidData{
@@ -125,14 +295,12 @@ class CovidData{
   }
 }
 
-List<dynamic> countries = [];
+List<dynamic> covidData = new List<dynamic>();
+List<String> countries = new List<String>();
+List <String> stringCountries = new List<String>();
 Iterable lists;
 
-show(){
-  for (var i = 0; i < countries.length; i++) {
-    print(countries[i]['country']);
-  }
-}
+
 
 
 const baseUrl = "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats";
