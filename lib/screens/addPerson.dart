@@ -22,6 +22,7 @@ bool _nameValidate = false;
 bool _phoneValidate = false;
 TextEditingController nameController = new TextEditingController();
 TextEditingController phoneController = new TextEditingController();
+TextEditingController locationController = new TextEditingController();
 
 class FormscreenState extends State<Formscreen> {
 
@@ -53,6 +54,7 @@ class FormscreenState extends State<Formscreen> {
     );
   }
 
+
   Widget _buildNameField() {
     return TextField(
       controller: nameController,
@@ -67,6 +69,18 @@ class FormscreenState extends State<Formscreen> {
     );
   }
 
+Widget _buildLocationField() {
+    return TextField(
+      controller: locationController,
+      decoration: InputDecoration(
+          icon: Icon(Icons.location_on),
+          labelText: 'Location',
+          labelStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Colors.grey)),
+    );
+  }
 
   Widget _builPhoneField() {
     return TextField(
@@ -161,7 +175,7 @@ class FormscreenState extends State<Formscreen> {
                 ],
               )),
               Container(
-                padding: EdgeInsets.only(top: 35.0, left: 20.0),
+                padding: EdgeInsets.only(top: 35.0, left: 25.0, right: 25, bottom: 30),
                 child: Column(
                   children: <Widget>[
                     _buildDateFIeld(),
@@ -214,7 +228,11 @@ class FormscreenState extends State<Formscreen> {
                     ),
                     _builPhoneField(),
                     SizedBox(
-                      height: 25.0,
+                      height: 10.0,
+                    ),
+                    _buildLocationField(),
+                    SizedBox(
+                      height: 45.0,
                     ),
                     Container(
                       height: 40.0,
@@ -275,7 +293,8 @@ class FormscreenState extends State<Formscreen> {
         id INTEGER PRIMARY KEY,
         name TEXT,
         phone TEXT,
-        date TEXT
+        date TEXT,
+        location TEXT
       )
       '''
       );
@@ -284,7 +303,8 @@ class FormscreenState extends State<Formscreen> {
     int insertResponse = await db.insert("people", {
       "name": nameController.text,
       "phone": phoneController.text,
-      "date": stringDate
+      "date": stringDate,
+      "location": locationController.text
       });
 
     if(insertResponse == -1){
@@ -305,6 +325,7 @@ class FormscreenState extends State<Formscreen> {
       _selectedDate = DateTime.now();
       nameController.text = "";
       phoneController.text = "";
+      locationController.text = "";
       final snackBar = SnackBar(
           content: Text('Person added successfully!'),
           action: SnackBarAction(
@@ -333,9 +354,9 @@ addTapped(BuildContext context) async{
 }
 
 listTapped(BuildContext context) async {
+  Navigator.of(context).pop();
   await Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => ListPerson()));
-  Navigator.of(context).pop();
 }
 
 statusTapped(BuildContext context) async {

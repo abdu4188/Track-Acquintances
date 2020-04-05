@@ -3,7 +3,6 @@ import 'package:track_aquintances/screens/addPerson.dart';
 import 'package:track_aquintances/screens/editPerson.dart';
 import 'package:track_aquintances/screens/homeScreen.dart';
 import 'package:track_aquintances/screens/listPerson.dart';
-import 'package:track_aquintances/screens/personDetail.dart';
 import 'screens/splashScreen.dart';
 
 void main() => runApp(Home());

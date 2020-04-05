@@ -308,6 +308,10 @@ class API {
     return http.get(baseUrl, headers: {
       "x-rapidapi-host": "covid-19-coronavirus-statistics.p.rapidapi.com",
       "x-rapidapi-key": "8ca140a965mshe408a2e58737ba5p14b104jsn19a57561ec85"
-    });
+    }).catchError(noInternet());
   }
+}
+
+noInternet(){
+  return true;
 }

@@ -63,8 +63,18 @@ class ListPersonState extends State<ListPerson>{
                       child: Center(
                         child: ListTile(
                           onTap: () => dateTapped(date[index]['date'], context),
-                          title: Text(date[index]['date']),
-                          subtitle: Icon(Icons.navigate_next),
+                          title: Text(
+                            date[index]['date'],
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.navigate_next,
+                            color: Colors.teal,
+                            size: 40,
+                          ),
                         )
                       ) 
                     ),
@@ -82,8 +92,6 @@ class ListPersonState extends State<ListPerson>{
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PersonDetail(date))
     );
-    Navigator.of(context).pop();
-
   }
   
 }

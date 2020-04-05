@@ -16,16 +16,15 @@ class HomeScreenState extends State<HomeScreen>{
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, "people.db");
 
-    Database db;
-
-    db = await openDatabase(path, version: 1, onOpen: (db) {
+    await openDatabase(path, version: 1, onOpen: (db) {
     }, onCreate: (Database db, int version) async {
       await db.execute('''CREATE TABLE IF NOT EXISTS people
       (
         id INTEGER PRIMARY KEY,
         name TEXT,
         phone TEXT,
-        date TEXT
+        date TEXT,
+        location TEXT
       )
       '''
       );
