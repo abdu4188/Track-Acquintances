@@ -13,7 +13,8 @@ enum Fever {yes, no}
 enum Tiredness {yes, no}
 enum Breathing {yes, no}
 
-Cough _cough = Cough.no;
+Cough 
+_cough = Cough.no;
 Fever _fever = Fever.no;
 Tiredness _tiredness = Tiredness.no;
 Breathing _breathing = Breathing.no;

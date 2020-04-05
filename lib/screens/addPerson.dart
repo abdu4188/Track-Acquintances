@@ -193,6 +193,7 @@ Widget _buildLocationField() {
                       onPressed: () async {
                         final PermissionStatus permissionStatus = await _getPermission();
                         if (permissionStatus == PermissionStatus.granted) {
+                          Navigator.of(context).pop();
                           Navigator.push(
                               context, MaterialPageRoute(builder: (context) => ContactsPage()));
                         } else {
@@ -347,9 +348,10 @@ Widget _buildLocationField() {
 
   
 addTapped(BuildContext context) async{
+  Navigator.of(context).pop();
    await Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => Formscreen()));
-  Navigator.of(context).pop();
+
 }
 
 listTapped(BuildContext context) async {
