@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
+import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -9,6 +11,32 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeScreenState extends State<HomeScreen>{
+
+  saveToDb() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "people.db");
+
+    Database db;
+
+    db = await openDatabase(path, version: 1, onOpen: (db) {
+    }, onCreate: (Database db, int version) async {
+      await db.execute('''CREATE TABLE IF NOT EXISTS people
+      (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        phone TEXT,
+        date TEXT
+      )
+      '''
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    saveToDb();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +85,88 @@ class HomeScreenState extends State<HomeScreen>{
               padding: EdgeInsets.all(20),
               child: Card(
                 child: Text(
-                  'Track Acquintances is an app to help you track the people you met with recently to trace your contacts. We highly recommend you stay home if you don\'t need to go out for critical reasons. Click the + icon to add a person',
+                  'Track Acquintances is an app to help you track the people you met with recently to trace your contacts. We highly recommend you to stay home if you don\'t need to go out for critical reasons. Click the + icon to add a person',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.teal,
+                    fontSize: 18.0,
+                    // color: Colors.teal,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat'),
                 ),
               ),
-            )
+            ),
+            Text(
+              "Please read the following precautions",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.teal,
+                fontFamily: 'Montserrat'),
+            ),
+            Container(
+              height: 60,
+            ),
+            Image.asset(
+              'images/home.PNG',
+              width: 120,
+              height: 120,
+            ),
+            Text(
+              "Stay at home if there is no critical matter that needs your attention",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.teal,
+                fontSize: 15
+              ),
+            ),
+            Container(
+              height: 40,
+            ),
+            Image.asset(
+              'images/wash.PNG',
+              width: 120,
+              height: 120,
+            ),
+            Text(
+              "Wash your hands frequently",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.teal,
+                fontSize: 15
+              ),
+            ),
+            Container(
+              height: 40,
+            ),
+            Image.asset(
+              'images/shake.PNG',
+              width: 120,
+              height: 120,
+            ),
+            Text(
+              "Avoid hand shakes and keep your distance from people",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.teal,
+                fontSize: 15
+              ),
+            ),
+            Container(
+              height: 40,
+            ),
+            Image.asset(
+              'images/eye.PNG',
+              width: 120,
+              height: 120,
+            ),
+            Text(
+              "Avoid touching your face",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.teal,
+                fontSize: 15
+              ),
+            ),
           ],
         ),
       ),

@@ -197,9 +197,7 @@ class StatusPageState extends State<StatusPage>{
         )
         ) :
       Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.teal,
-          
+        child: CircularProgressIndicator(          
         ),
       )
   );

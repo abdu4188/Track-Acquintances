@@ -400,7 +400,10 @@ class CustomListTile extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Icon(_icon),
+                        Icon(
+                        _icon,
+                        color: Colors.teal,
+                        ),
                         Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(

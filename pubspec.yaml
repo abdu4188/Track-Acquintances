@@ -54,6 +54,12 @@ flutter:
   assets:
     - images/corona.JPG
     - images/covid.png
+    - images/cough.PNG
+    - images/eye.PNG
+    - images/home.PNG
+    - images/sanitize.PNG
+    - images/shake.PNG
+    - images/wash.PNG
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
