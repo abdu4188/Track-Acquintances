@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,25 @@ class StatusPageState extends State<StatusPage>{
       fetch();
     });
   }
+
+  noInternet(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("No Internet"),
+        content: Text("You must be connected to use this feature"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("close"),
+            onPressed: () => {
+              Navigator.of(context).pushNamed('/HomeScreen')
+            },
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,18 +223,25 @@ class StatusPageState extends State<StatusPage>{
   );
   } 
 
-fetch(){
-  print("fetch");
-  API.getStats().then(
-    (response) => {
-      // print(countries),
-      response = json.decode(response.body),
-      covidData = response['data']['covid19Stats'].map((model) => CovidData.fromJson(model)).toList(), 
-      show()
+fetch() async{
+  try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        API.getStats().then(
+          (response) => {
+            // print(countries),
+            response = json.decode(response.body),
+            covidData = response['data']['covid19Stats'].map((model) => CovidData.fromJson(model)).toList(), 
+            show()
+          }
+        );
+        setState(() {
+        });
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      noInternet();
     }
-  );
-  setState(() {
-  });
 }
 
 show(){

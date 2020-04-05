@@ -24,7 +24,6 @@ class _ContactsPageState extends State<ContactsPage> {
   searchChanged(){
     setState(() {
       search = searchController.text;
-      print(search);
       _contacts = _contacts.where(
           (contact) => contact?.displayName?.contains(search) ?? false
           ).toList();
@@ -53,7 +52,6 @@ class _ContactsPageState extends State<ContactsPage> {
 //          .toList();
 
       setState(() {
-        print(contacts.elementAt(0).displayName);
         _contacts = contacts;
         if(contacts.every((contact) => contact?.displayName != null)){
           _contacts = contacts.where(
