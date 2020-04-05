@@ -181,7 +181,7 @@ class SymptomsState extends State<Symptoms>{
                               children: <Widget>[
                                 Center(
                                   child: Text(
-                                    "Do you have tiredness?",
+                                    "Do you feel tired frequently?",
                                     style: TextStyle(
                                       color: Colors.teal,
                                       fontSize: 16, 
@@ -233,7 +233,7 @@ class SymptomsState extends State<Symptoms>{
                               children: <Widget>[
                                 Center(
                                   child: Text(
-                                    "Do you have difficulty when breathing?",
+                                    "Do you have difficulty breathing?",
                                     style: TextStyle(
                                       color: Colors.teal,
                                       fontSize: 14, 

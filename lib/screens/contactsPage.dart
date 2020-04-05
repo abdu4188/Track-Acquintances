@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _ContactsPageState extends State<ContactsPage> {
   int currentIndex;
   String search = "";
   TextEditingController searchController = new TextEditingController();
+  var contacts;
 
   @override
   void initState() {
@@ -22,19 +24,62 @@ class _ContactsPageState extends State<ContactsPage> {
   searchChanged(){
     setState(() {
       search = searchController.text;
+      print(search);
+      _contacts = _contacts.where(
+          (contact) => contact?.displayName?.contains(search) ?? false
+          ).toList();
     });
+    search = "";
   }
 
-  Future<void> getContacts() async {
-    //We already have permissions for contact when we get to this page, so we
-    // are now just retrieving it
-    final Iterable<Contact> contacts = await ContactsService.getContacts();
-    setState(() {
-      _contacts = contacts.where(
-        (contact) => contact.displayName.contains(search)
-      );
-    });
+  Future<PermissionStatus>  _getPermission() async{
+    PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.contacts);
+    if (permission != PermissionStatus.granted && permission != PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissionStatus = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+      return permissionStatus[PermissionGroup.contacts] ?? PermissionStatus.unknown;
+    } else {
+      return permission;
+    }
   }
+
+
+
+  Future<void> getContacts() async {
+    PermissionStatus permissionStatus = await _getPermission();
+    if (permissionStatus == PermissionStatus.granted) {
+      // Load without thumbnails initially.
+      var contacts = await ContactsService.getContacts(withThumbnails: false);
+//      var contacts = (await ContactsService.getContactsForPhone("8554964652"))
+//          .toList();
+
+      setState(() {
+        print(contacts.elementAt(0).displayName);
+        _contacts = contacts;
+        if(contacts.every((contact) => contact?.displayName != null)){
+          _contacts = contacts.where(
+          (contact) => contact?.displayName?.contains(search) ?? false
+          ).toList();
+        }
+      });
+
+      // Lazy load thumbnails after rendering initial contacts.
+      for (final contact in contacts) {
+        ContactsService.getAvatar(contact).then((avatar) {
+          if (avatar == null) return; // Don't redraw if no change.
+          setState(() => contact.avatar = avatar);
+        });
+      }
+    } else {
+      _handleInvalidPermissions(permissionStatus);
+    }
+  }
+
+  void _handleInvalidPermissions(PermissionStatus permissionStatus) {
+    if (permissionStatus == PermissionStatus.denied) {
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +87,10 @@ class _ContactsPageState extends State<ContactsPage> {
       appBar: AppBar(
         title: (Text('Contacts')),
       ),
-      body: Container(
-        child: ListView(
+      body: Column(
         children: <Widget>[
           Container(
-            width: 90,
+            width: 290,
             child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -56,6 +100,7 @@ class _ContactsPageState extends State<ContactsPage> {
                       labelText: "search"
                     ),
                     controller: searchController,
+                    onChanged: searchChanged(),
                   ),
                   FlatButton(
                     child: Icon(
@@ -63,7 +108,7 @@ class _ContactsPageState extends State<ContactsPage> {
                       color: Colors.teal,
                       size: 45,
                       ),
-                    onPressed: () => searchChanged(),
+                    onPressed: searchChanged(),
                   )
                 ],
               )
@@ -71,70 +116,41 @@ class _ContactsPageState extends State<ContactsPage> {
           SizedBox(
             height: 20,
           ),
-          _contacts != null
-          //Build a list view of all contacts, displaying their avatar and
-          // display name
-          ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: _contacts?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                Contact contact = _contacts?.elementAt(index);
-                return GestureDetector(
-                  child: Card(
-                    child: ListTile(
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                    leading: (contact.avatar != null && contact.avatar.isNotEmpty)
-                        ? CircleAvatar(
-                            backgroundImage: MemoryImage(contact.avatar),
-                          )
-                        : CircleAvatar(
-                            child: Text(contact.initials()),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                    title: Text(
-                      contact.displayName ?? '',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat'
-                      ),
-                      ),
-                    subtitle: ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: contact.phones.length,
-                      itemBuilder: (BuildContext context, int index){
-                        currentIndex = index;
-                        return ListTile(
-                          subtitle: Text(
-                            contact.phones?.elementAt(index)?.value,
-                            style: TextStyle(
-                              fontFamily: 'Montserrat'
-                            ),
-                            ),
-                        );
-                      },
-                    ),
-                    trailing: GestureDetector(
-                      child: Icon(
-                        Icons.add,
-                        size: 50,
-                        color: Colors.teal,
-                      ),
-                      onTap: () => {
-                        setValuesInForm(contact),
-                        Navigator.of(context).pop(),
-                        }
-                    )
-                  ),
-                ),
-                );
-                },
-            )
-          : Center(child: const CircularProgressIndicator()),
+          Expanded(
+            child: _contacts != null
+                ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: _contacts?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    Contact c = _contacts?.elementAt(index);
+                    return ListTile(
+                      leading: (c.avatar != null && c.avatar.length > 0)
+                          ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+                          : CircleAvatar(child: Text(c.initials())),
+                      title: Text(c.displayName ?? ""),
+                      subtitle:
+                        c.phones.length > 0 ?
+                        Text(
+                          c.phones.elementAt(0).value
+                        ):Text(""),
+                      trailing: GestureDetector(
+                        child: Icon(
+                          Icons.add,
+                          size: 40,
+                          color: Colors.teal,
+                        ),
+                        onTap: () => {
+                          setValuesInForm(c),
+                          Navigator.of(context).pop(),
+                          }
+                      )
+                    );
+                  },
+                )
+                : Center(child: CircularProgressIndicator(),),
+          ),
         ],
-      )
-    
       )
       );
   }

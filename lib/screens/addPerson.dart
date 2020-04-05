@@ -196,7 +196,6 @@ Widget _buildLocationField() {
                           Navigator.push(
                               context, MaterialPageRoute(builder: (context) => ContactsPage()));
                         } else {
-                          //If permissions have been denied show standard cupertino alert dialog
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -382,15 +381,10 @@ setValuesInForm(Contact contact){
 
 
   Future<PermissionStatus>  _getPermission() async{
-    final PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.contacts);
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.denied ){
-      final Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.contacts]);
-      return permissionStatus[PermissionGroup.contacts] ??
-          PermissionStatus.unknown;
+    PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.contacts);
+    if (permission != PermissionStatus.granted && permission != PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissionStatus = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+      return permissionStatus[PermissionGroup.contacts] ?? PermissionStatus.unknown;
     } else {
       return permission;
     }
