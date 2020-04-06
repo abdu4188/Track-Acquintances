@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
+import 'package:track_aquintances/screens/contactsPage.dart';
 import 'package:track_aquintances/screens/editPerson.dart';
 import 'package:track_aquintances/screens/homeScreen.dart';
 import 'package:track_aquintances/screens/listPerson.dart';
+import 'package:track_aquintances/screens/status.dart';
+import 'package:track_aquintances/screens/symptoms.dart';
 import 'screens/splashScreen.dart';
 
 void main() => runApp(Home());
@@ -25,6 +28,9 @@ class Home extends StatelessWidget{
       '/AddPerson' : (BuildContext context) => new Formscreen(),
       '/EditPerson' : (BuildContext context) => new EditScreen(),
       '/ListDates' : (BuildContext context) => new ListPerson(),
+      '/Status' : (BuildContext context) => new StatusPage(),
+      '/Symptoms' : (BuildContext context) => new Symptoms(),
+      '/Contacts' : (BuildContext context) => new ContactsPage(),
       },
     );
   }

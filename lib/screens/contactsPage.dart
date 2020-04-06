@@ -24,11 +24,16 @@ class _ContactsPageState extends State<ContactsPage> {
   searchChanged(){
     setState(() {
       search = searchController.text;
-      _contacts = _contacts.where(
-          (contact) => contact?.displayName?.contains(search) ?? false
-          ).toList();
+      print(search);
+      getContacts();
+      // if(contacts != null){
+      //   _contacts = contacts.where(
+      //   (contact) => contact?.displayName?.contains(search) ?? false
+      //   ).toList();
+      // }
+      print(contacts);
     });
-    search = "";
+    // search = "";
   }
 
   Future<PermissionStatus>  _getPermission() async{
@@ -44,6 +49,7 @@ class _ContactsPageState extends State<ContactsPage> {
 
 
   Future<void> getContacts() async {
+    print("Get contacts");
     PermissionStatus permissionStatus = await _getPermission();
     if (permissionStatus == PermissionStatus.granted) {
       // Load without thumbnails initially.
@@ -53,7 +59,7 @@ class _ContactsPageState extends State<ContactsPage> {
 
       setState(() {
         _contacts = contacts;
-        if(contacts.every((contact) => contact?.displayName != null)){
+        if(contacts != null){
           _contacts = contacts.where(
           (contact) => contact?.displayName?.contains(search) ?? false
           ).toList();
@@ -98,7 +104,6 @@ class _ContactsPageState extends State<ContactsPage> {
                       labelText: "search"
                     ),
                     controller: searchController,
-                    onChanged: searchChanged(),
                   ),
                   FlatButton(
                     child: Icon(
@@ -106,7 +111,7 @@ class _ContactsPageState extends State<ContactsPage> {
                       color: Colors.teal,
                       size: 45,
                       ),
-                    onPressed: searchChanged(),
+                    onPressed: _contacts !=null ? () => searchChanged() : null,
                   )
                 ],
               )
@@ -141,6 +146,7 @@ class _ContactsPageState extends State<ContactsPage> {
                         onTap: () => {
                           setValuesInForm(c),
                           Navigator.of(context).pop(),
+                          Navigator.of(context).pushNamed('/AddPerson'),
                           }
                       )
                     );

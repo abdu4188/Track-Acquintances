@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:track_aquintances/screens/status.dart';
-import 'package:track_aquintances/screens/symptoms.dart';
-import 'contactsPage.dart';
-import 'listPerson.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -194,24 +190,23 @@ Widget _buildLocationField() {
                         final PermissionStatus permissionStatus = await _getPermission();
                         if (permissionStatus == PermissionStatus.granted) {
                           Navigator.of(context).pop();
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => ContactsPage()));
+                          Navigator.of(context).pushNamed('/Contacts');
                         } else {
                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                    title: Text('Permissions error'),
-                                    content: Text('Please enable contacts access '
-                                        'permission in system settings'),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text('Close'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  ));
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text('Permissions error'),
+                              content: Text('Please enable contacts access '
+                                  'permission in system settings'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Close'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ));
                         }
                       },
                       child: Text(
@@ -339,37 +334,25 @@ Widget _buildLocationField() {
     }
   }
 
-
-  setValuesInForm(Contact contact){
-    
-  }
 }
 
 
   
 addTapped(BuildContext context) async{
-  Navigator.of(context).pop();
-   await Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => Formscreen()));
+  Navigator.of(context).popAndPushNamed("/AddPerson");
 
 }
 
 listTapped(BuildContext context) async {
-  Navigator.of(context).pop();
-  await Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => ListPerson()));
+  Navigator.of(context).popAndPushNamed("/ListDates");
 }
 
 statusTapped(BuildContext context) async {
-  await Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => StatusPage()));
-  Navigator.of(context).pop();
+  Navigator.of(context).popAndPushNamed("/Status");
 }
 
 symptomsTapped(BuildContext context) async {
-  await Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => Symptoms()));
-  Navigator.of(context).pop();
+  Navigator.of(context).popAndPushNamed("/Symptoms");
 }
 
 Contact contact;

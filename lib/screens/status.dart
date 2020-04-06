@@ -225,7 +225,7 @@ class StatusPageState extends State<StatusPage>{
 
 fetch() async{
   try {
-      final result = await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup('fast.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         API.getStats().then(
           (response) => {
@@ -252,7 +252,6 @@ show(){
   for (var i = 0; i < countries.length; i++) {
     stringCountries.add(countries[i].toString());
   }
-  print(covidData[0].confirmed);
   hasLoaded = true;
   setState(() {
     
@@ -335,7 +334,7 @@ class API {
     return http.get(baseUrl, headers: {
       "x-rapidapi-host": "covid-19-coronavirus-statistics.p.rapidapi.com",
       "x-rapidapi-key": "8ca140a965mshe408a2e58737ba5p14b104jsn19a57561ec85"
-    }).catchError(noInternet());
+    });
   }
 }
 

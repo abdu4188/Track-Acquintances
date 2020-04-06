@@ -83,15 +83,27 @@ class HomeScreenState extends State<HomeScreen>{
             Padding(
               padding: EdgeInsets.all(20),
               child: Card(
-                child: Text(
-                  'Track Acquintances is an app to help you track the people you met with recently to trace your contacts. We highly recommend you to stay home if you don\'t need to go out for critical reasons. Click the + icon to add a person',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    // color: Colors.teal,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat'),
-                ),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "Genesis Technologies",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                          color: Colors.teal,
+                          fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat'),
+                    ),
+                    Text(
+                      'Track Acquintances is an app to help you track the people you met with recently to trace your contacts. We highly recommend you to stay home if you don\'t need to go out for critical reasons. Click the + icon to add a person',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        // color: Colors.teal,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat'),
+                    ),
+                  ],
+                )
               ),
             ),
             Text(
@@ -172,8 +184,7 @@ class HomeScreenState extends State<HomeScreen>{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => {
-          Navigator.of(context).pop(),
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Formscreen()))
+            Navigator.of(context).popAndPushNamed("/AddPerson")
         }
       ),  
     );
