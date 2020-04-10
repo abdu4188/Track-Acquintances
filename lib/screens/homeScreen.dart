@@ -61,10 +61,13 @@ class HomeScreenState extends State<HomeScreen>{
                   child: Column(
                     children: <Widget>[
                       Material(
-                        elevation: 10,
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        child: Image.asset('images/covid.png',
-                            width: 100, height: 100),
+                          elevation: 10,
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                          child: GestureDetector(
+                            child: Image.asset('images/covid.png',
+                                width: 100, height: 100),
+                            onTap: () => Navigator.of(context).popAndPushNamed('/HomeScreen'),
+                          )
                       )
                     ],
                   ),

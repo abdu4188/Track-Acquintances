@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "338217467430",
+    "firebase_url": "https://track-acquintances.firebaseio.com",
+    "project_id": "track-acquintances",
+    "storage_bucket": "track-acquintances.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338217467430:android:e4c4d38cc9c613b30cf0e7",
+        "android_client_info": {
+          "package_name": "com.example.track_aquintances"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338217467430-se60mudb7cj89r7nmgtumrjn7bpcseuk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4n6CxVsRuY7JSPyFj9C3LoCvWxMQB4l8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338217467430-se60mudb7cj89r7nmgtumrjn7bpcseuk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

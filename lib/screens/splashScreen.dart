@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget{
@@ -11,6 +12,29 @@ class SplashScreen extends StatefulWidget{
 }
 
 class SplashScreenState extends State<SplashScreen>{
+  @override
+  initState(){
+    FirebaseAuth.instance.signOut();
+    FirebaseAuth.instance
+    .currentUser().then(
+      (currentUser) => {
+        if(currentUser == null){
+          {Navigator.pushReplacementNamed(context, "/login")}
+        }
+        else{
+          Firestore.instance
+          .collection("users")
+          .document(currentUser.uid)
+          .get()
+          .then((DocumentSnapshot result) => 
+            startTime()
+          ).catchError((err) => print(err))
+        }
+      }
+    ).catchError((err) => print(err));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +70,5 @@ class SplashScreenState extends State<SplashScreen>{
 
   void navigationPage() {
     Navigator.of(context).pushReplacementNamed('/HomeScreen');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startTime();
   }
 }

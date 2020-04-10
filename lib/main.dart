@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:track_aquintances/screens/Login.dart';
+import 'package:track_aquintances/screens/Register.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
 import 'package:track_aquintances/screens/contactsPage.dart';
 import 'package:track_aquintances/screens/editPerson.dart';
@@ -31,6 +33,8 @@ class Home extends StatelessWidget{
       '/Status' : (BuildContext context) => new StatusPage(),
       '/Symptoms' : (BuildContext context) => new Symptoms(),
       '/Contacts' : (BuildContext context) => new ContactsPage(),
+      '/login': (BuildContext context) => LoginPage(),
+      '/register': (BuildContext context) => RegisterPage(),
       },
     );
   }
