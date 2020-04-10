@@ -14,7 +14,6 @@ class SplashScreen extends StatefulWidget{
 class SplashScreenState extends State<SplashScreen>{
   @override
   initState(){
-    FirebaseAuth.instance.signOut();
     FirebaseAuth.instance
     .currentUser().then(
       (currentUser) => {

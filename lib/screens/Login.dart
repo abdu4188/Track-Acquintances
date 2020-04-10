@@ -45,7 +45,16 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Login"),
+          title: Center(
+            child: Text("Login",
+              style: TextStyle(
+                fontSize: 25.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat'
+              ),
+            ),
+          )
         ),
         body: Container(
             padding: const EdgeInsets.all(20.0),
@@ -68,8 +77,18 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     validator: pwdValidator,
                   ),
+                  SizedBox(
+                    height: 30,
+                  ),
                   RaisedButton(
-                    child: Text("Login"),
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontFamily: 'Montserrat'
+                      ),
+                    ),
                     color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     onPressed: () {
@@ -97,9 +116,26 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                   ),
-                  Text("Don't have an account yet?"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Don't have an account yet?",
+                    style: TextStyle(
+                        fontSize: 17.0,
+                        fontFamily: 'Montserrat'
+                      ),
+                  ),
                   FlatButton(
-                    child: Text("Register here!"),
+                    child: Text(
+                      "Register here!",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.teal,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat'
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pushNamed(context, "/register");
                     },
