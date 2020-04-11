@@ -99,13 +99,25 @@ class PersonDetailState extends State<PersonDetail>{
                             fontSize: 21
                             ),
                           ),
-                        subtitle: Text(
-                          "Phone number: "+people[index]['phone'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat',
-                            fontSize: 16
-                          ),
+                        subtitle: Column(
+                          children: <Widget>[
+                            Text(
+                              "Phone number: "+people[index]['phone'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                                fontSize: 16
+                              ),
+                            ),
+                            Text(
+                              "Location: "+people[index]['location'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                                fontSize: 16
+                              ),
+                            ),
+                          ],
                         ),
                         trailing: Container(
                           child: Column(
