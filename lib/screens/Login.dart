@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailInputController;
   TextEditingController pwdInputController;
   String errorMessage;
+  bool logging = false;
 
   @override
   initState() {
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )
         ),
-        body: Container(
+        body: !logging ? Container(
             padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
                 child: Form(
@@ -124,6 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     onPressed: () {
+                      setState(() {
+                        logging = true;
+                      });
                       if (_loginFormKey.currentState.validate()) {
                         try {
                           FirebaseAuth.instance
@@ -174,9 +178,18 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
-            ))));
+            ))
+            ): 
+            Center(
+              child: CircularProgressIndicator(          
+            )
+            )
+            );
   }
   loginError(String errorCode){
+    setState(() {
+      logging = false;
+    });
     switch (errorCode) {
       case "ERROR_INVALID_EMAIL":
         errorMessage = "Your email address appears to be malformed.";

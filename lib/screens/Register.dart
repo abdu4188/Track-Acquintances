@@ -17,6 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController pwdInputController;
   TextEditingController confirmPwdInputController;
   TextEditingController phoneInputController;
+  bool loading = false;
 
   @override
   initState() {
@@ -64,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         )
       ),
-      body: Container(
+      body: !loading ? Container(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
             child: Form(
@@ -143,6 +144,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
                 onPressed: () {
+                  setState(() {
+                    loading = true;
+                  });
                   if (_registerFormKey.currentState.validate()) {
                     if (pwdInputController.text ==
                         confirmPwdInputController.text) {
@@ -232,10 +236,19 @@ class _RegisterPageState extends State<RegisterPage> {
               )
             ],
           ),
-        ))));
+        ))
+        ) : 
+        Center(
+          child: CircularProgressIndicator(          
+          )
+        )
+        );
   }
   signupError(String error){
-    print("Signup error");
+    setState(() {
+      loading = false; 
+    });
+
     String errorMessage;
     switch (error){
       case 'ERROR_WEAK_PASSWORD':
