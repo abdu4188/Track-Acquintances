@@ -20,8 +20,16 @@ _cough = Cough.no;
 Fever _fever = Fever.no;
 Tiredness _tiredness = Tiredness.no;
 Breathing _breathing = Breathing.no;
+bool  loaded;
 
 class SymptomsState extends State<Symptoms>{
+
+  @override
+  void initState() {
+    loaded = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +75,7 @@ class SymptomsState extends State<Symptoms>{
             ],
           ),
         ),
-        body: Column(
+        body: !loaded ? Column(
           children: <Widget>[
             Expanded(
               child: ListView(
@@ -300,6 +308,9 @@ class SymptomsState extends State<Symptoms>{
               ),
             )
           ],
+        ) :
+        Center(
+          child: CircularProgressIndicator(),
         )
       );
   }
@@ -314,15 +325,23 @@ class SymptomsState extends State<Symptoms>{
     });
 
     if(_breathing == Breathing.yes && _fever == Fever.yes && _tiredness == Tiredness.yes && _cough == Cough.yes){
-      Firestore.instance.collection("probable").document().setData(
-        {
-          "user.uid": user.uid,
-          "fname": fname,
-          "lname": lname,
-          "email": email,
-          "phone": phone
+
+      Firestore.instance.collection('probable').document(user.uid).get().then(
+        (snapshot) => {
+          if(!snapshot.exists){
+            Firestore.instance.collection("probable").document(user.uid).setData(
+              {
+                "user.uid": user.uid,
+                "fname": fname,
+                "lname": lname,
+                "email": email,
+                "phone": phone
+              }
+            )
+          }
         }
       );
+
       showDialog(
         context: context,
         builder: (BuildContext context){
