@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
 
@@ -301,8 +303,26 @@ class SymptomsState extends State<Symptoms>{
         )
       );
   }
-  submitTapped(BuildContext context){
+  submitTapped(BuildContext context) async {
+    var user = await FirebaseAuth.instance.currentUser();
+    var fname, lname, email, phone;
+    await Firestore.instance.collection('users').document(user.uid).get().then((snapshot) => {
+      fname = snapshot['fname'],
+      lname = snapshot['surname'],
+      email = snapshot['email'],
+      phone = snapshot['phone']
+    });
+
     if(_breathing == Breathing.yes && _fever == Fever.yes && _tiredness == Tiredness.yes && _cough == Cough.yes){
+      Firestore.instance.collection("probable").document().setData(
+        {
+          "user.uid": user.uid,
+          "fname": fname,
+          "lname": lname,
+          "email": email,
+          "phone": phone
+        }
+      );
       showDialog(
         context: context,
         builder: (BuildContext context){
