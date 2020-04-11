@@ -86,6 +86,7 @@ class StatusPageState extends State<StatusPage>{
               CustomListTile('View added People', Icons.people, listTapped),
               CustomListTile('View Stats', Icons.show_chart, statusTapped),
               CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
+              CustomListTile('About', Icons.info, aboutTapped),
             ],
           ),
         ),

@@ -146,6 +146,7 @@ Widget _buildLocationField() {
               CustomListTile('View added People', Icons.people, listTapped),
               CustomListTile('View Stats', Icons.show_chart, statusTapped),
               CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
+              CustomListTile('About', Icons.info, aboutTapped),
             ],
           ),
         ),
@@ -344,6 +345,9 @@ Widget _buildLocationField() {
 addTapped(BuildContext context) async{
   Navigator.of(context).popAndPushNamed("/AddPerson");
 
+}
+aboutTapped(BuildContext context) async{
+  Navigator.of(context).popAndPushNamed("/About");
 }
 
 listTapped(BuildContext context) async {

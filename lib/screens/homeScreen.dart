@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:track_aquintances/screens/addPerson.dart';
@@ -34,8 +38,62 @@ class HomeScreenState extends State<HomeScreen>{
   @override
   void initState() {
     saveToDb();
+    syncToFirebase();
     super.initState();
   }
+
+  List<Map<String, dynamic>> people = [];
+  List<Map<String, dynamic>> mPeople;
+  List firebaseIds = [];
+
+  syncToFirebase() async {
+    try {
+      final result = await InternetAddress.lookup('fast.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        var data = Firestore.instance.collection('log').getDocuments().then(
+          (QuerySnapshot snapshot) => {
+            snapshot.documents.forEach((f) => 
+            {firebaseIds.add(f.data['id']),
+            getDbData()}
+            )
+          }
+        );
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+    }
+  }
+
+  getDbData() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "people.db");
+
+    Database db;
+    db = await openDatabase(path, version: 1);
+    people = await db.rawQuery("SELECT * FROM people");
+    mPeople = people.map((m) => Map.of(m)).toList();
+
+    for(var i=0; i< firebaseIds.length; i++){
+      mPeople.removeWhere((item) => item['id'] == int.parse(firebaseIds[i]));
+    }
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    for (var i = 0; i < mPeople.length; i++) {
+      Firestore.instance.collection('log').document().setData(
+        {
+          "id": mPeople[i]['id'].toString(),
+          "name": mPeople[i]['name'],
+          "phone": mPeople[i]['phone'],
+          "date": mPeople[i]['date'],
+          "location": mPeople[i]['location'],
+          "user": user.uid
+        }
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,38 +135,13 @@ class HomeScreenState extends State<HomeScreen>{
               CustomListTile('View added People', Icons.people, listTapped),
               CustomListTile('View Stats', Icons.show_chart, statusTapped),
               CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
+              CustomListTile('About', Icons.info, aboutTapped),
             ],
           ),
         ),
       body: Container(
         child: ListView(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Card(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      "Genesis Technologies",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                          color: Colors.teal,
-                          fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat'),
-                    ),
-                    Text(
-                      'Track Acquintances is an app to help you track the people you met with recently to trace your contacts. We highly recommend you to stay home if you don\'t need to go out for critical reasons. Click the + icon to add a person',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        // color: Colors.teal,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat'),
-                    ),
-                  ],
-                )
-              ),
-            ),
             Text(
               "Please read the following precautions",
               textAlign: TextAlign.center,
