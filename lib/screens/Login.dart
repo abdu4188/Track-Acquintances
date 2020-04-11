@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +23,36 @@ class _LoginPageState extends State<LoginPage> {
     pwdInputController = new TextEditingController();
     super.initState();
   }
+
+  checkInterrnet() async {
+    try {
+      final result = await InternetAddress.lookup('fast.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      noInternet();
+    }
+  }
+  
+  noInternet(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("No Internet"),
+        content: Text("You must be connected to use this feature"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("close"),
+            onPressed: () => {
+              Navigator.of(context).pop()
+            },
+          )
+        ],
+      )
+    );
+  }
+
 
   String emailValidator(String value) {
     Pattern pattern =
