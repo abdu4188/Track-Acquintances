@@ -87,7 +87,11 @@ class _ContactsPageState extends State<ContactsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: (Text('Contacts')),
       ),
@@ -156,6 +160,7 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
         ],
       )
-      );
-  }
+      ),
+    );
+    }
 }

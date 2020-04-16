@@ -32,7 +32,11 @@ class SymptomsState extends State<Symptoms>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
       appBar: AppBar(
           title: Center(
             child: Text(
@@ -312,8 +316,9 @@ class SymptomsState extends State<Symptoms>{
         Center(
           child: CircularProgressIndicator(),
         )
-      );
-  }
+      ),
+    );
+    }
   submitTapped(BuildContext context) async {
     var user = await FirebaseAuth.instance.currentUser();
     var fname, lname, email, phone;

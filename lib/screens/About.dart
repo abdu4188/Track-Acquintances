@@ -11,7 +11,11 @@ class AboutPage extends StatefulWidget{
 class AboutPageState extends State<AboutPage>{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -89,6 +93,7 @@ class AboutPageState extends State<AboutPage>{
         ),
       ),
 
+    ),
     );
   }
 }

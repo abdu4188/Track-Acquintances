@@ -108,7 +108,11 @@ Widget _buildLocationField() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
         appBar: AppBar(
           title: Center(
             child: Text(
@@ -265,7 +269,8 @@ Widget _buildLocationField() {
             )
           ],
         )
-        );
+        ),
+    );
   }
   String stringDate;
   addPerson(BuildContext context) {

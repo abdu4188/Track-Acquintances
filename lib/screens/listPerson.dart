@@ -35,7 +35,11 @@ class ListPersonState extends State<ListPerson>{
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -85,8 +89,9 @@ class ListPersonState extends State<ListPerson>{
           ],
         )
       ),
+    ),
     );
-  }
+    }
 
   dateTapped(String date, BuildContext context) async{
     await Navigator.of(context).push(

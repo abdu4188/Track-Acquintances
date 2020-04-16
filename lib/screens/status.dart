@@ -45,7 +45,11 @@ class StatusPageState extends State<StatusPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed('/HomeScreen');
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -222,8 +226,9 @@ class StatusPageState extends State<StatusPage>{
         child: CircularProgressIndicator(          
         ),
       )
-  );
-  } 
+  ),
+    );
+    } 
 
 fetch() async{
   try {
