@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:track_aquintances/screens/addPerson.dart';
+import 'package:track_aquintances/drawer.dart';
 
 class Symptoms extends StatefulWidget{
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'addPerson.dart';
+import 'package:track_aquintances/drawer.dart';
 
 class AboutPage extends StatefulWidget{
   @override

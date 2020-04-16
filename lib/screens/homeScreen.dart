@@ -1,10 +1,9 @@
 import 'dart:io';
-
+import 'package:track_aquintances/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:track_aquintances/screens/addPerson.dart';
 import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget{
@@ -96,7 +95,9 @@ class HomeScreenState extends State<HomeScreen>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: onWillPop ,
+      child: Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -220,10 +221,26 @@ class HomeScreenState extends State<HomeScreen>{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => {
-            Navigator.of(context).popAndPushNamed("/AddPerson")
+            Navigator.of(context).pushNamed('/AddPerson')
         }
       ),  
-    );
+    ), 
+    ); 
+    
+    }
+
+DateTime currentBackPressTime;
+
+Future<bool> onWillPop() {
+  print("object");
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null || 
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      SnackBar(content: Text("Press the back button twice to exit"));
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
 }
