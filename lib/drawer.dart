@@ -45,12 +45,13 @@ class CustomListTile extends StatelessWidget {
   }
 }
 
+
 addTapped(BuildContext context) async{
   Navigator.of(context).popAndPushNamed("/AddPerson");
 
 }
-aboutTapped(BuildContext context) async{
-  Navigator.of(context).popAndPushNamed("/About");
+homeTapped(BuildContext context) async{
+  Navigator.of(context).popAndPushNamed("/HomeScreen");
 }
 
 listTapped(BuildContext context) async {

@@ -115,7 +115,7 @@ class HomeScreenState extends State<HomeScreen>{
               DrawerHeader(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: <Color>[Colors.teal, Colors.tealAccent])),
+                        colors: <Color>[Colors.green, Colors.teal])),
                 child: Container(
                   child: Column(
                     children: <Widget>[
@@ -132,12 +132,12 @@ class HomeScreenState extends State<HomeScreen>{
                   ),
                 ),
               ),
+              CustomListTile('Home', Icons.home, homeTapped),
               CustomListTile('Add Person', Icons.add, addTapped),
               CustomListTile('View added People', Icons.people, listTapped),
               CustomListTile('View Stats', Icons.show_chart, statusTapped),
               CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
-              CustomListTile('About', Icons.info, aboutTapped),
-            ],
+            ]
           ),
         ),
       body: Container(
@@ -185,8 +185,9 @@ class HomeScreenState extends State<HomeScreen>{
                   Text(
                     "Genesis Technologies",
                     style: TextStyle(
+                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 23,
                       color: Colors.white
                     ),
                   ),
@@ -196,6 +197,7 @@ class HomeScreenState extends State<HomeScreen>{
                   Text(
                     "Please take the following precautions",
                     style: TextStyle(
+                      fontFamily: 'Montserrat',
                       fontSize: 16,
                       color: Colors.white70
                     ),
@@ -245,8 +247,10 @@ class HomeScreenState extends State<HomeScreen>{
                               height: 80,
                             ),
                             Text(
-                              "Cover your mouth and nose when yous sneeze or cough",
+                              "Cover your mouth and nose when you sneeze or cough",
                               style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.8,
                                 
                               ),
                             ),
@@ -273,7 +277,8 @@ class HomeScreenState extends State<HomeScreen>{
                             Text(
                               "Avoid touching your face with unwashed hands",
                               style: TextStyle(
-                                
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.8,
                               ),
                             ),
                           ],
@@ -298,7 +303,8 @@ class HomeScreenState extends State<HomeScreen>{
                             Text(
                               "Stay home if you don't need to get out for critical matters",
                               style: TextStyle(
-                                
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.5,
                               ),
                             ),
                           ],
@@ -323,7 +329,8 @@ class HomeScreenState extends State<HomeScreen>{
                             Text(
                               "Wash your hands frequently for atleast 20 seconds with soap.",
                               style: TextStyle(
-                                
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.5,
                               ),
                             ),
                           ],
@@ -348,7 +355,8 @@ class HomeScreenState extends State<HomeScreen>{
                             Text(
                               "Avoid hand shakes and keep your distance with people",
                               style: TextStyle(
-                                
+                                fontFamily: 'Montserrat',
+                                fontSize: 13.5,
                               ),
                             ),
                           ],

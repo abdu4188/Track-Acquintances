@@ -139,7 +139,7 @@ Widget _buildLocationField() {
               DrawerHeader(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: <Color>[Colors.teal, Colors.tealAccent])),
+                        colors: <Color>[Colors.green, Colors.teal])),
                 child: Container(
                   child: Column(
                     children: <Widget>[
@@ -156,11 +156,11 @@ Widget _buildLocationField() {
                   ),
                 ),
               ),
+              CustomListTile('Home', Icons.home, homeTapped),
               CustomListTile('Add Person', Icons.add, addTapped),
               CustomListTile('View added People', Icons.people, listTapped),
               CustomListTile('View Stats', Icons.show_chart, statusTapped),
               CustomListTile('Symptoms', Icons.check_circle_outline, symptomsTapped),
-              CustomListTile('About', Icons.info, aboutTapped),
             ],
           ),
         ),
