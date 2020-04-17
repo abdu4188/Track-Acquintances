@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:track_aquintances/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as Path;
 
 class StatusPage extends StatefulWidget{
   @override
@@ -23,6 +27,58 @@ class StatusPageState extends State<StatusPage>{
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetch();
     });
+  }
+
+  List<Map<String, dynamic>> people = [];
+  List<Map<String, dynamic>> mPeople;
+  List firebaseIds = [];
+
+  syncToFirebase() async {
+    try {
+      final result = await InternetAddress.lookup('fast.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        var data = Firestore.instance.collection('log').getDocuments().then(
+          (QuerySnapshot snapshot) => {
+            snapshot.documents.forEach((f) => 
+            {firebaseIds.add(f.data['id']),
+            getDbData()}
+            )
+          }
+        );
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+    }
+  }
+
+  getDbData() async {
+    var databasesPath = await getDatabasesPath();
+    String path = Path.join(databasesPath, "people.db");
+
+    Database db;
+    db = await openDatabase(path, version: 1);
+    people = await db.rawQuery("SELECT * FROM people");
+    mPeople = people.map((m) => Map.of(m)).toList();
+
+    for(var i=0; i< firebaseIds.length; i++){
+      mPeople.removeWhere((item) => item['id'] == int.parse(firebaseIds[i]));
+    }
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    for (var i = 0; i < mPeople.length; i++) {
+      Firestore.instance.collection('log').document().setData(
+        {
+          "id": mPeople[i]['id'].toString(),
+          "name": mPeople[i]['name'],
+          "phone": mPeople[i]['phone'],
+          "date": mPeople[i]['date'],
+          "location": mPeople[i]['location'],
+          "user": user.uid
+        }
+      );
+    }
   }
 
   noInternet(){
@@ -234,6 +290,7 @@ fetch() async{
   try {
       final result = await InternetAddress.lookup('fast.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        syncToFirebase();
         API.getStats().then(
           (response) => {
             // print(countries),
@@ -343,8 +400,4 @@ class API {
       "x-rapidapi-key": "8ca140a965mshe408a2e58737ba5p14b104jsn19a57561ec85"
     });
   }
-}
-
-noInternet(){
-  return true;
 }

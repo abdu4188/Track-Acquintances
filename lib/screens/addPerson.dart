@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -105,6 +109,11 @@ Widget _buildLocationField() {
         _selectedDate = picked;
       });
   }
+
+
+  List<Map<String, dynamic>> people = [];
+  List<Map<String, dynamic>> mPeople;
+  List firebaseIds = [];
 
   @override
   Widget build(BuildContext context) {
@@ -312,6 +321,35 @@ Widget _buildLocationField() {
       "location": locationController.text
       });
 
+    List<Map> result = await db.rawQuery('SELECT * FROM people WHERE name = ? AND phone = ? AND date = ? AND location = ?', [nameController.text, phoneController.text, stringDate, locationController.text]);
+
+    var lastId;
+    result.forEach((data) => {
+      lastId = data['id']
+    });
+
+    try {
+      final result = await InternetAddress.lookup('fast.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+        Firestore.instance.collection('log').document().setData(
+            {
+              "id": lastId.toString(),
+              "name": nameController.text,
+              "phone": phoneController.text,
+              "date": stringDate,
+              "location": locationController.text,
+              "user": user.uid
+            }
+          );
+
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+    }
+
+    
     if(insertResponse == -1){
       final snackBar = SnackBar(
           content: Text('Something went Wrong!'),
