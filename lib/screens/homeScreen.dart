@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:track_aquintances/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,7 +97,7 @@ class HomeScreenState extends State<HomeScreen>{
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onWillPop ,
+      onWillPop: () => onWillPop(context) ,
       child: Scaffold(
       appBar: AppBar(
         title: Center(
@@ -170,11 +171,12 @@ class HomeScreenState extends State<HomeScreen>{
                         padding:  EdgeInsets.all(8),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
-                          child: Image.asset(
-                            "images/logo.png",
-                            height: 550,
-                            width: 550,
-                          )
+                          child: Icon(Icons.image)
+                          // Image.asset(
+                          //   "images/logo.png",
+                          //   height: 550,
+                          //   width: 550,
+                          // )
                         ),
                       ),
                     ]
@@ -383,16 +385,26 @@ class HomeScreenState extends State<HomeScreen>{
 
 DateTime currentBackPressTime;
 
-Future<bool> onWillPop() {
-  print("object");
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null || 
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      SnackBar(content: Text("Press the back button twice to exit"));
-      return Future.value(false);
-    }
-    return Future.value(true);
-  }
+Future<bool> onWillPop(BuildContext context){
+    return showDialog(
+    context: context,
+    builder: (context) => new AlertDialog(
+      title: new Text('Are you sure?'),
+      content: new Text('Do you want to exit the App'),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text("No"),
+        ),
+        SizedBox(height: 16),
+        new FlatButton(
+          onPressed: () => SystemNavigator.pop(),
+          child: Text("Yes"),
+        ),
+      ],
+    ),
+  ) ??
+      false;
+}
 
 }
