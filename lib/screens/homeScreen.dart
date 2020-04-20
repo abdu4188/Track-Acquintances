@@ -170,13 +170,12 @@ class HomeScreenState extends State<HomeScreen>{
                         ),
                         padding:  EdgeInsets.all(8),
                         child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.image)
-                          // Image.asset(
-                          //   "images/logo.png",
-                          //   height: 550,
-                          //   width: 550,
-                          // )
+                          backgroundColor: Colors.transparent,
+                          child: Image.asset(
+                            "images/logo.png",
+                            height: 100,
+                            width: 100,
+                          )
                         ),
                       ),
                     ]
